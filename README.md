@@ -1,3 +1,10 @@
+# Albums Challenge Solution
+My Solution to Albums Challenge.
+
+* Query search also support Plus `+` and Minus `-` Operators. 
+* Price range Start is inclusive and End is exclusive [5 , 10)
+* Unit tests updated accordingly.
+
 # Albums Challenge
 
 Your challenge is to finish this web app which lists top 100 music albums from iTunes with search and filter functionality.
