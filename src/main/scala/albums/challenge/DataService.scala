@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets
 import scala.jdk.CollectionConverters._
 
 @Service
-class DataService(restTemplate :RestTemplate) {
+class DataService(restTemplate: RestTemplate) {
   private val logger: Logger = LogManager.getLogger(classOf[DataService])
   private val uri: String =
     "https://itunes.apple.com/us/rss/topalbums/limit=200/json"

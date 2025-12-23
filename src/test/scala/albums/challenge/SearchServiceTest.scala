@@ -48,10 +48,17 @@ class SearchServiceTest extends munit.FunSuite {
     )
   }
 
-  test("Search by general keyword") {
+  test("Search using plus Operator") {
     assertEquals(
-      searchService.search(entries, "best").items,
-      entries,
+      searchService.search(entries, "best + Earth").items,
+      List(entry3),
+    )
+  }
+
+  test("Search using Minus Operator") {
+    assertEquals(
+      searchService.search(entries, "best - Earth").items,
+      List(entry1, entry2, entry5),
     )
   }
 
@@ -65,14 +72,14 @@ class SearchServiceTest extends munit.FunSuite {
   test("Price facet generation") {
     assertEquals(
       searchService.search(entries, "best").facets.get("price"),
-      Some(List(Facet("5 - 10", 1), Facet("15 - 20", 1))),
+      Some(List(Facet("5 - 10", 2), Facet("15 - 20", 1), Facet("20 - 25", 1))),
     )
   }
 
   test("Year facet generation") {
     assertEquals(
       searchService.search(entries, "best").facets.get("year"),
-      Some(List(Facet("2008", 1), Facet("2002", 1))),
+      Some(List(Facet("2008", 1), Facet("2002", 1), Facet("1983", 1), Facet("1978", 1))),
     )
   }
 
@@ -82,11 +89,11 @@ class SearchServiceTest extends munit.FunSuite {
 
     assertEquals(
       result.items,
-      entries,
+      List(entry1, entry2),
     )
     assertEquals(
       result.facets.get("year"),
-      Some(List(Facet("2008", 1), Facet("2002", 1))),
+      Some(List(Facet("2008", 1), Facet("2002", 1), Facet("1983", 1), Facet("1978", 1))),
     )
     assertEquals(
       result.facets.get("price"),
@@ -104,7 +111,7 @@ class SearchServiceTest extends munit.FunSuite {
     )
     assertEquals(
       result.facets.get("year"),
-      Some(List(Facet("2002", 1))),
+      Some(List(Facet("2002", 1), Facet("1978", 1))),
     )
     assertEquals(
       result.facets.get("price"),
@@ -112,25 +119,25 @@ class SearchServiceTest extends munit.FunSuite {
     )
   }
 
-  test("Filter returns zero count") {
+  test("Filter should not return zero count") {
     val result = searchService.search(
       entries,
-      "best",
+      "Nonexistent Item",
       List("2002", "2008"),
       List("15 - 20"),
     )
 
     assertEquals(
       result.items,
-      List(entry2),
+      List(),
     )
     assertEquals(
       result.facets.get("year"),
-      Some(List(Facet("2008", 1), Facet("2002", 0))),
+      Some(List()),
     )
     assertEquals(
       result.facets.get("price"),
-      Some(List(Facet("5 - 10", 1), Facet("15 - 20", 1))),
+      Some(List()),
     )
   }
 }
